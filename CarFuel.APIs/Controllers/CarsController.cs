@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarFuel.Models;
 using CarFuel.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,12 @@ namespace CarFuel.APIs.Controllers
         public CarsController(App app)
         {
             this.app = app;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Car>> GetAll()
+        {
+            return  this.app.Cars.All.ToList();
         }
     }
 }

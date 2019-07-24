@@ -9,6 +9,7 @@ namespace CarFuel.Services
     {
         public CarService(AppDB db) : base(db)
         {
+
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CarFuel.Services.Core
         public ServiceBase(AppDB db) => Db = db;
         public AppDB Db { get; }
 
-        public IQueryable<T> All => throw new NotImplementedException();
+        public IQueryable<T> All => Query(x => true);
         public T Find(params object[] keys) => Db.Set<T>().Find(keys);
         public IQueryable<T> Query(Func<T, bool> condition)
           => Db.Set<T>().Where(condition).AsQueryable();
