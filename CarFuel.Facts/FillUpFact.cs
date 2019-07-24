@@ -35,15 +35,16 @@ namespace CarFuel.Facts
                 //Assert.Null(result);
             }
 
-            [Fact]
-            public void TwoFillUp()
-            {
-                FillUp f1 = new FillUp(odometer: 1000, liters: 50.0);
-                FillUp f2 = new FillUp(odometer: 1600, liters: 60.0);
-                f1.Next = f2;
-                var result = f1.Kml;
-                Assert.Equal(10.0, result);
-            }
+            //[Fact]
+            //public void TwoFillUp()
+            //{
+            //    FillUp f1 = new FillUp(odometer: 1000, liters: 50.0);
+            //    FillUp f2 = new FillUp(odometer: 1600, liters: 60.0);
+            //    f1.Next = f2;
+            //    var result = f1.Kml;
+            //    Assert.Equal(10.0, result);
+            //    Assert.Null(f2.Kml);
+            //}
 
             [Theory]
             [InlineData(1000, 151.0)]

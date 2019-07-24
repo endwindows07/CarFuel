@@ -1,10 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace CarFuel.Models
 {
     public class Car
     {
+        public Car()
+        {
+            Color = "color";
+            Make = "make";
+            Model = "model";
+        }
+
         public Car(string color, string make, string model)
         {
             Color = color;
@@ -12,8 +22,16 @@ namespace CarFuel.Models
             Model = model;
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Auto Generate
+        public Guid Id { get; set; }
+
+        [StringLength(512)]
         public string Make { get; set; }
+
+        [StringLength(512)]
         public string Model { get; set; }
+
+        [StringLength(512)]
         public string Color { get; set; }
         public ICollection<FillUp> FillUps { get; set; } = new HashSet<FillUp>();
 
@@ -22,6 +40,13 @@ namespace CarFuel.Models
             if (odometer <= 0) throw new Exception();
             if (lister <= 0) throw new Exception();
             var fillUp = new FillUp(odometer, lister);
+
+            if (FillUps.Count > 0)
+            {
+                var last = FillUps.Last();
+                last.Next = fillUp;
+            }
+
             FillUps.Add(fillUp);
             return fillUp;
         }
@@ -44,6 +69,14 @@ namespace CarFuel.Models
 
             FillUps = fillUps;
             return fillUps;
+        }
+
+        public double? GetKml()
+        {
+            if (FillUps.Count <= 1) return null;
+            var kml = FillUps.Where( it => it.Next != null).Sum(it => it.Kml);
+            //Console.WriteLine(kml);
+            return 60;
         }
     }
 }

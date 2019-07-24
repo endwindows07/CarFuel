@@ -9,12 +9,13 @@ namespace CarFuel.Facts
     public class CarFact
     {
         [Fact]
-        public void AddCar()
+        public void NewCar()
         {
             Car car = new Car(color: "red",
                               make: "...",
                               model: "model 4");
-            Assert.NotNull(car);
+            Assert.NotNull(car.FillUps);
+
         }
 
         [Theory]
@@ -86,6 +87,67 @@ namespace CarFuel.Facts
             {
                 _ = car.AddFillUps(odometers, listers);
             });
+        }
+
+        [Fact]
+        public void AddSingleFillUp()
+        {
+            var car = new Car();
+
+            var f = car.AddFillUp(1000, 20);
+
+            Assert.Equal(1, car.FillUps.Count);
+            Assert.Equal(1000, f.odometer);
+            Assert.Equal(20, f.liters);
+        }
+
+
+        [Fact]
+        public void AddTwoFillUp()
+        {
+            var car = new Car();
+
+            var v1 = car.AddFillUp(1000, 20);
+            var v2 = car.AddFillUp(2000, 30);
+
+            Assert.Equal(2, car.FillUps.Count);
+            Assert.Equal(1000, v1.odometer);
+            Assert.Equal(20, v1.liters);
+            Assert.Equal(2000, v2.odometer);
+            Assert.Equal(30, v2.liters);
+
+            Assert.Same(v2, v1.Next);
+        }
+
+        [Fact]
+        public void AverageFillUp()
+        {
+            var car = new Car();
+            double? kml = car.GetKml();
+            Assert.Null(kml);
+            //Assert.Equal    
+            //var result = f.Kml;
+        }
+
+        [Fact]
+        public void SingleFillUp()
+        {
+            var car = new Car();
+            car.AddFillUp(1000, 20);
+            double? kml = car.GetKml();
+            Assert.Null(kml);
+        }
+
+        [Fact]
+        public void TwoFillUp()
+        {
+            var car = new Car();
+            car.AddFillUp(1000, 50);
+            car.AddFillUp(1600, 60);
+
+            double? kml = car.GetKml();
+            var it = Math.Round((double)kml, 2, MidpointRounding.AwayFromZero);
+            Assert.Equal(60, it);
         }
     }
 }
