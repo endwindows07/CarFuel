@@ -7,17 +7,18 @@ namespace CarFuel.Services
     public class App
     {
         private Lazy<MemberService> memberService;
+        private Lazy<CarService> carService;
 
         public App(AppDB db)
         {
             memberService = new Lazy<MemberService>(() => new MemberService(db));
-            Cars = new CarService(db);
+            carService = new Lazy<CarService>(()=> new CarService(db));
             Db = db;
         }
 
         public MemberService Members => memberService.Value;
 
-        public CarService Cars { get; set; }
+        public CarService Cars => carService.Value;
         public AppDB Db { get; }
 
         public int SaveChanged() => Db.SaveChanges();
