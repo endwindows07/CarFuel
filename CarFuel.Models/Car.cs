@@ -5,6 +5,13 @@ namespace CarFuel.Models
 {
     public class Car
     {
+        public Car(string color, string make, string model)
+        {
+            Color = color;
+            Make = make;
+            Model = model;
+        }
+
         public string Make { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
