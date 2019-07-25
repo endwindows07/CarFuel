@@ -26,5 +26,17 @@ namespace CarFuel.APIs.Controllers
         {
             return this.app.Cars.All.ToList().ConvertAll(it => CarResponse.FromModel(it));
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<CarResponse> GetById(Guid id)
+        {
+            return CarResponse.FromModel(app.Cars.Find(id));
+        }
+
+        [HttpPost]
+        public ActionResult<CarResponse> Post(CarReequest item)
+        {
+
+        }
     }
 }

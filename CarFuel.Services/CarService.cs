@@ -19,5 +19,15 @@ namespace CarFuel.Services
             return Db.Cars.Include(it => it.FillUps).Where(condition).AsQueryable();
             //return base.Query(condition);
         }
+
+        public override Car Find(params object[] keys)
+        {
+            var c = base.Find(keys);
+            if (c != null)
+            {
+                Db.Entry(c).Collection(it => it.FillUps).Load();
+            }
+            return c;
+        }
     }
 }
