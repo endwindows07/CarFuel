@@ -12,11 +12,11 @@ namespace CarFuel.Services.Core
         protected readonly App app;
 
         public IQueryable<T> All => Query(x => true);
-        public virtual T Find(params object[] keys) => app.Db.Set<T>().Find(keys);
-        public virtual IQueryable<T> Query(Func<T, bool> condition) => app.Db.Set<T>().Where(condition).AsQueryable();
+        public virtual T Find(params object[] keys) => app.db.Set<T>().Find(keys);
+        public virtual IQueryable<T> Query(Func<T, bool> condition) => app.db.Set<T>().Where(condition).AsQueryable();
 
-        public virtual T Add(T item) => app.Db.Set<T>().Add(item).Entity;
-        public virtual T Delete(T item) => app.Db.Set<T>().Remove(item).Entity;
-        public virtual T Update(T item) => app.Db.Set<T>().Update(item).Entity;
+        public virtual T Add(T item) => app.db.Set<T>().Add(item).Entity;
+        public virtual T Delete(T item) => app.db.Set<T>().Remove(item).Entity;
+        public virtual T Update(T item) => app.db.Set<T>().Update(item).Entity;
     }
 }
