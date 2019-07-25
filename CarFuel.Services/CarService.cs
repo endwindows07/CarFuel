@@ -40,5 +40,11 @@ namespace CarFuel.Services
 
             return item;
         }
+
+        public override Car Add(Car item)
+        {
+            if (Db.Cars.Count() >= 2) throw new Exception();
+            return base.Add(item);
+        }
     }
 }

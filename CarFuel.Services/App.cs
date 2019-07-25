@@ -8,6 +8,8 @@ namespace CarFuel.Services
     {
         private Lazy<MemberService> memberService;
         private Lazy<CarService> carService;
+        //public AppDB Db { get; }
+        public AppDB Db { get; }
 
         public App(AppDB db)
         {
@@ -19,7 +21,6 @@ namespace CarFuel.Services
         public MemberService Members => memberService.Value;
 
         public CarService Cars => carService.Value;
-        public AppDB Db { get; }
 
         public int SaveChanged() => Db.SaveChanges();
         public Task<int> SaveChangedAsyns() => Db.SaveChangesAsync();

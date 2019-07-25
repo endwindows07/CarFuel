@@ -9,7 +9,6 @@ namespace CarFuel.Services
     {
         public MemberService(AppDB db) : base(db)
         {
-
         }
     }
 }

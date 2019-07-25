@@ -13,7 +13,9 @@ namespace CarFuel.Models
         [StringLength(512)]
         public string PictureUrl { get; set; }
 
-        
+        public bool IsDeleted { get; set; }
+        public DateTime DeleteDateTime { get; set; }
+
         public MemberLavel Lavel { get; set; } = MemberLavel.Bascis;
         public ICollection<Car> Cars { get; set; } = new HashSet<Car>();
     }

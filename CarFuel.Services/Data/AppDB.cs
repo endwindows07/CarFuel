@@ -16,10 +16,13 @@ namespace CarFuel.Services.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<FillUp>().ToTable("FillUps");
 
             modelBuilder.Entity<Member>().Property(it => it.Lavel).HasConversion<string>();
-            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Member>().HasQueryFilter(it => it.IsDeleted); // condition เพื่อเช็คการทำงาน
         }
     }
 }

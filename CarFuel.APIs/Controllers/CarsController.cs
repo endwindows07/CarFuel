@@ -14,6 +14,7 @@ namespace CarFuel.APIs.Controllers
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CarsController : ControllerBase
     {
         private readonly App app;
@@ -24,23 +25,23 @@ namespace CarFuel.APIs.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(200, Type = typeof(ProblemDetails))]
         public ActionResult<IEnumerable<CarResponse>> GetAll()
         {
             return this.app.Cars.All.ToList().ConvertAll(it => CarResponse.FromModel(it));
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(200, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(404, Type = typeof(ProblemDetails))]
         public ActionResult<CarResponse> GetById(Guid id)
         {
             return CarResponse.FromModel(app.Cars.Find(id));
         }
 
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(201, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(200, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(201, Type = typeof(ProblemDetails))]
         public ActionResult<CarResponse> Post(CarReequest  item)
         {
             var result = item.ToModel();
@@ -52,9 +53,9 @@ namespace CarFuel.APIs.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(402, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(204, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(404, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(402, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(204, Type = typeof(ProblemDetails))]
         public ActionResult Put(Guid id, CarReequest item)
         {
             var res = app.Cars.Find(id);
@@ -70,9 +71,9 @@ namespace CarFuel.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(202, Type = typeof(ProblemDetails))]
-        [ProducesResponseType(200, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(404, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(202, Type = typeof(ProblemDetails))]
+        //[ProducesResponseType(200, Type = typeof(ProblemDetails))]
         public ActionResult<CarResponse> Delete(Guid id)
         {
             var c = app.Cars.Find(id);
@@ -84,7 +85,6 @@ namespace CarFuel.APIs.Controllers
         }
 
         [HttpPost("{id}/FillUps")]
-        
         [ProducesResponseType(200, Type = typeof(ProblemDetails))]
         [ProducesResponseType(404, Type = typeof(ProblemDetails))]
         public ActionResult<FillUpResponse> AddFillUp(Guid id, FillUp item)
@@ -93,7 +93,7 @@ namespace CarFuel.APIs.Controllers
             if (car == null) return NotFound();
             car.AddFillUp(item.odometer, item.liters);
             app.SaveChanged();
-            return Ok(FillUpResponse.FromModel(car.FillUps.Last()));
+            return CreatedAtAction(nameof(GetById), new { id}, FillUpResponse.FromModel(car.FillUps.Last()));
         }
     }
 }
