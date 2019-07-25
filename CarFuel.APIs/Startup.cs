@@ -13,7 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-//using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace CarFuel.APIs
 {
@@ -34,6 +35,11 @@ namespace CarFuel.APIs
             services.AddDbContext<AppDB>(option => option.UseSqlServer(Configuration.GetConnectionString("AppDb")));
 
             services.AddScoped<App>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +54,17 @@ namespace CarFuel.APIs
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwagger();
 
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            //app.UseRouter(,)
             app.UseHttpsRedirection();
             app.UseMvc();
+            
         }
     }
 }

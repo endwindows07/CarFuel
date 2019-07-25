@@ -11,23 +11,34 @@ namespace CarFuel.Services
     {
         public CarService(AppDB db) : base(db)
         {
-            
+
         }
 
         public override IQueryable<Car> Query(Func<Car, bool> condition)
         {
-            return Db.Cars.Include(it => it.FillUps).Where(condition).AsQueryable();
+            return Db.Cars.Include(it => it.FillUps).Where(it => !it.IsDeleted).AsQueryable();
             //return base.Query(condition);
         }
 
         public override Car Find(params object[] keys)
         {
             var c = base.Find(keys);
-            if (c != null)
-            {
-                Db.Entry(c).Collection(it => it.FillUps).Load();
-            }
+            if (c == null) return null;
+            if (c.IsDeleted) return null;
+            Db.Entry(c).Collection(it => it.FillUps).Load();
             return c;
+        }
+
+        public override Car Delete(Car item)
+        {
+            if (!item.IsDeleted)
+            {
+                item.IsDeleted = true;
+                item.DeleteDateTime = DateTime.Now;
+            }
+
+
+            return item;
         }
     }
 }

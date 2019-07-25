@@ -35,6 +35,10 @@ namespace CarFuel.Models
         public string Color { get; set; }
         public ICollection<FillUp> FillUps { get; set; } = new HashSet<FillUp>();
 
+
+        public bool IsDeleted { get; set; }
+        public DateTime DeleteDateTime { get; set; }
+
         public FillUp AddFillUp(int odometer, double lister)
         {
             if (odometer <= 0) throw new Exception();

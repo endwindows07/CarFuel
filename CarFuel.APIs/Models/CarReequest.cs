@@ -1,4 +1,5 @@
-﻿using CarFuel.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using CarFuel.Models;
 
 namespace CarFuel.APIs.Models
 {
@@ -8,7 +9,7 @@ namespace CarFuel.APIs.Models
         public string Model { get; set; }
         public string Color { get; set; }
 
-        public Car ToModel()
+        public  Car ToModel()
         {
             return new Car
             {
