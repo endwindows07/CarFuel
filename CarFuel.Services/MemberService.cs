@@ -7,7 +7,7 @@ namespace CarFuel.Services
 {
     public class MemberService : ServiceBase<Member>
     {
-        public MemberService(AppDB db) : base(db)
+        public MemberService(App db) : base(db)
         {
         }
     }

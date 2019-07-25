@@ -8,15 +8,15 @@ namespace CarFuel.Services.Core
 {
     public class ServiceBase<T> : IService<T> where T : class
     {
-        public ServiceBase(AppDB db) => Db = db;
-        protected readonly AppDB Db;
+        public ServiceBase(App app) => this.app = app;
+        protected readonly App app;
 
         public IQueryable<T> All => Query(x => true);
-        public virtual T Find(params object[] keys) => Db.Set<T>().Find(keys);
-        public virtual IQueryable<T> Query(Func<T, bool> condition) => Db.Set<T>().Where(condition).AsQueryable();
+        public virtual T Find(params object[] keys) => app.Db.Set<T>().Find(keys);
+        public virtual IQueryable<T> Query(Func<T, bool> condition) => app.Db.Set<T>().Where(condition).AsQueryable();
 
-        public virtual T Add(T item) => Db.Set<T>().Add(item).Entity;
-        public virtual T Delete(T item) => Db.Set<T>().Remove(item).Entity;
-        public virtual T Update(T item) => Db.Set<T>().Update(item).Entity;
+        public virtual T Add(T item) => app.Db.Set<T>().Add(item).Entity;
+        public virtual T Delete(T item) => app.Db.Set<T>().Remove(item).Entity;
+        public virtual T Update(T item) => app.Db.Set<T>().Update(item).Entity;
     }
 }

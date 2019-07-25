@@ -9,14 +9,14 @@ namespace CarFuel.Services
 {
     public class CarService : ServiceBase<Car>
     {
-        public CarService(AppDB db) : base(db)
+        public CarService(App db) : base(db)
         {
 
         }
 
         public override IQueryable<Car> Query(Func<Car, bool> condition)
         {
-            return Db.Cars.Include(it => it.FillUps).Where(it => !it.IsDeleted).AsQueryable();
+            return app.Db.Cars.Include(it => it.FillUps).Where(it => !it.IsDeleted).AsQueryable();
             //return base.Query(condition);
         }
 
@@ -25,7 +25,7 @@ namespace CarFuel.Services
             var c = base.Find(keys);
             if (c == null) return null;
             if (c.IsDeleted) return null;
-            Db.Entry(c).Collection(it => it.FillUps).Load();
+            app.Db.Entry(c).Collection(it => it.FillUps).Load();
             return c;
         }
 
@@ -43,7 +43,7 @@ namespace CarFuel.Services
 
         public override Car Add(Car item)
         {
-            if (Db.Cars.Count() >= 2) throw new Exception();
+            if (app.Db.Cars.Count() >= 2) throw new Exception();
             return base.Add(item);
         }
     }

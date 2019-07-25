@@ -9,12 +9,12 @@ namespace CarFuel.Services
         private Lazy<MemberService> memberService;
         private Lazy<CarService> carService;
         //public AppDB Db { get; }
-        public AppDB Db { get; }
+        internal readonly AppDB Db;
 
         public App(AppDB db)
         {
-            memberService = new Lazy<MemberService>(() => new MemberService(db));
-            carService = new Lazy<CarService>(()=> new CarService(db));
+            memberService = new Lazy<MemberService>(() => new MemberService(this));
+            carService = new Lazy<CarService>(()=> new CarService(this));
             Db = db;
         }
 
