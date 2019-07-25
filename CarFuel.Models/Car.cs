@@ -78,5 +78,28 @@ namespace CarFuel.Models
             //Console.WriteLine(kml);
             return 60;
         }
+
+        public double? AverageKmL
+        {
+            get
+            {
+                double sumArea = 0.0;
+                int sumDistance = 0;
+
+                foreach (var f in FillUps)
+                {
+                    if (f.Next != null)
+                    {
+                        var distance = f.Next.odometer - f.odometer;
+                        sumArea += distance * f.Kml.Value;
+                        sumDistance += distance;
+                    }
+                }
+
+                if (sumDistance == 0) return null;
+
+                return Math.Round(sumArea / sumDistance, 2, MidpointRounding.AwayFromZero); //ปัดทศนิยมแบบ5 แล้วปัดขึ้น ใช้ MidpointRounding.AwayFromZero 
+            }
+        }
     }
 }

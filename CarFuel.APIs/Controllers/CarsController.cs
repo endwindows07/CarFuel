@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarFuel.APIs.Models;
 using CarFuel.Models;
 using CarFuel.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,9 @@ namespace CarFuel.APIs.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Car>> GetAll()
+        public ActionResult<IEnumerable<CarResponse>> GetAll()
         {
-            return  this.app.Cars.All.ToList();
+            return this.app.Cars.All.ToList().ConvertAll(it => CarResponse.FromModel(it));
         }
     }
 }

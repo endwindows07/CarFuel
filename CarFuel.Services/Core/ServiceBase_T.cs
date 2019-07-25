@@ -13,8 +13,7 @@ namespace CarFuel.Services.Core
 
         public IQueryable<T> All => Query(x => true);
         public T Find(params object[] keys) => Db.Set<T>().Find(keys);
-        public IQueryable<T> Query(Func<T, bool> condition)
-          => Db.Set<T>().Where(condition).AsQueryable();
+        public IQueryable<T> Query(Func<T, bool> condition) => Db.Set<T>().Where(condition).AsQueryable();
 
         public T Add(T item) => Db.Set<T>().Add(item).Entity;
         public T Delete(T item) => Db.Set<T>().Remove(item).Entity;

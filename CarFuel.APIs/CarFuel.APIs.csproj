@@ -14,4 +14,7 @@
     <ProjectReference Include="..\CarFuel.Services\CarFuel.Services.csproj" />
     <ProjectReference Include="..\CarFuel.Models\CarFuel.Models.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>
