@@ -21,26 +21,31 @@ namespace CarFuel.Web.Controllers
     {
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly ILogger<LoginModel> logger;
+        private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, IConfiguration configuration)
+        public AuthController(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager , IConfiguration configuration)
         {
             this.signInManager = signInManager;
             this.logger = logger;
+            this.userManager = userManager;
             this.configuration = configuration;
         }
-        // GET: api/values
 
+        // GET: api/values
         [HttpGet]
         public async Task<ActionResult<AuthResponse>> Post(AuthRequest item)
         {
             var result = await signInManager.PasswordSignInAsync(item.UserName, item.Password, false, false);
             if (result.Succeeded)
             {
+                var user = await userManager.FindByNameAsync(item.UserName);
+
                 var claims = new[]
                 {
-                        new Claim(ClaimTypes.Name, item.UserName)
-                    };
+                    new Claim(ClaimTypes.Name, item.UserName),
+                    new Claim("Id", user.Id),
+                };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecurityKey"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

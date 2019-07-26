@@ -16,7 +16,11 @@ namespace CarFuel.Services
 
         public override IQueryable<Car> Query(Func<Car, bool> condition)
         {
-            return app.db.Cars.Include(it => it.FillUps).Where(it => !it.IsDeleted).AsQueryable();
+
+            return app.db.Cars.Include(it => it.FillUps)
+                .Where(it => it.Owner == app.CurentMember)
+                .Where(condition)
+                .Where(it => !it.IsDeleted).AsQueryable();
             //return base.Query(condition);
         }
 
@@ -25,7 +29,10 @@ namespace CarFuel.Services
             var c = base.Find(keys);
             if (c == null) return null;
             if (c.IsDeleted) return null;
+            if (c.Owner != app.CurentMember) return null;
+
             app.db.Entry(c).Collection(it => it.FillUps).Load();
+
             return c;
         }
 
@@ -43,7 +50,12 @@ namespace CarFuel.Services
 
         public override Car Add(Car item)
         {
-            if (app.db.Cars.Count() >= 2) throw new Exception();
+            //app.CurentMember.Cars.
+
+            var userCars = app.Cars.Query(it => it.Owner == app.CurentMember);
+
+            if (userCars.Count() >= 2) throw new Exception();
+            item.Owner = app.CurentMember;
             return base.Add(item);
         }
     }

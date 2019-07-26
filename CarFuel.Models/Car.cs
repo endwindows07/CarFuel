@@ -35,6 +35,10 @@ namespace CarFuel.Models
         public string Color { get; set; }
         public ICollection<FillUp> FillUps { get; set; } = new HashSet<FillUp>();
 
+        public Member Owner { get; set; }
+
+        [ForeignKey(nameof(Owner))]
+        public Guid OwnerId { get; set; }
 
         public bool IsDeleted { get; set; }
         public DateTime DeleteDateTime { get; set; }

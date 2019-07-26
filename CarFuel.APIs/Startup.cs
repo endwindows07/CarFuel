@@ -15,6 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using CarFuel.APIs.MiddleWares;
 
 namespace CarFuel.APIs
 {
@@ -35,16 +39,35 @@ namespace CarFuel.APIs
             services.AddDbContext<AppDB>(option => option.UseSqlServer(Configuration.GetConnectionString("AppDb")));
 
             services.AddScoped<App>();
+            services.AddScoped<AuthMiddleware>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuer = true,
+                       ValidateAudience = true,
+                       ValidateLifetime = true,
+                       ValidateIssuerSigningKey = true,
+                       ValidIssuer = Configuration["JWT:issuer"],
+                       ValidAudience = Configuration["JWT:audience"],
+                       IssuerSigningKey = new SymmetricSecurityKey(
+                           Encoding.UTF8.GetBytes(Configuration["JWT:SecurityKey"]))
+                   };
+               });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,6 +77,9 @@ namespace CarFuel.APIs
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseMiddleware<AuthMiddleware>();
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -64,7 +90,7 @@ namespace CarFuel.APIs
             //app.UseRouter(,)
             app.UseHttpsRedirection();
             app.UseMvc();
-            
+
         }
     }
 }
