@@ -22,17 +22,15 @@ namespace CarFuel.Services
 
                 var member = Members.Find(new Guid(UserId));
 
-                //if (member == null)
-                //{
-                //    member = new Member();
-                //    member.Id = new Guid(UserId);
-                //    member.Lavel = MemberLavel.Bascis;
-                //    Members.Add(member);
+                if (member == null)
+                {
+                    member = new Member();
+                    member.Id = new Guid(UserId);
+                    member.Lavel = MemberLavel.Bascis;
+                    Members.Add(member);
 
-                //    SaveChanged();
-                //}
-
-
+                    SaveChanged();
+                }
 
                 return member;
             }

@@ -44,14 +44,20 @@ namespace CarFuel.APIs.Controllers
         [HttpPost]
         //[ProducesResponseType(200, Type = typeof(ProblemDetails))]
         //[ProducesResponseType(201, Type = typeof(ProblemDetails))]
-        public ActionResult<CarResponse> Post(CarReequest  item)
+        public ActionResult<CarResponse> Post(CarReequest item)
         {
-            var result = item.ToModel();
+            try
+            {
+                var result = item.ToModel();
+                app.Cars.Add(result);
+                app.SaveChanged();
 
-            app.Cars.Add(result);
-            app.SaveChanged();
-
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -95,8 +101,8 @@ namespace CarFuel.APIs.Controllers
             if (car == null) return NotFound();
             car.AddFillUp(item.odometer, item.liters);
             app.SaveChanged();
-            
-            return CreatedAtAction(nameof(GetById), new { id}, FillUpResponse.FromModel(car.FillUps.Last()));
+
+            return CreatedAtAction(nameof(GetById), new { id }, FillUpResponse.FromModel(car.FillUps.Last()));
         }
     }
 }

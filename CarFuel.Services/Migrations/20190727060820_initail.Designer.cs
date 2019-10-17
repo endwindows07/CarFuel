@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarFuel.Services.Migrations
 {
     [DbContext(typeof(AppDB))]
-    [Migration("20190725083622_update03")]
-    partial class update03
+    [Migration("20190727060820_initail")]
+    partial class initail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,14 +36,14 @@ namespace CarFuel.Services.Migrations
                     b.Property<string>("Make")
                         .HasMaxLength(512);
 
-                    b.Property<Guid?>("MemberId");
-
                     b.Property<string>("Model")
                         .HasMaxLength(512);
 
+                    b.Property<Guid>("OwnerId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Cars");
                 });
@@ -93,9 +93,10 @@ namespace CarFuel.Services.Migrations
 
             modelBuilder.Entity("CarFuel.Models.Car", b =>
                 {
-                    b.HasOne("CarFuel.Models.Member")
+                    b.HasOne("CarFuel.Models.Member", "Owner")
                         .WithMany("Cars")
-                        .HasForeignKey("MemberId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CarFuel.Models.FillUp", b =>

@@ -36,6 +36,9 @@ namespace CarFuel.APIs
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            // UseLazyLoadingProxies => lazy loading (microsoft.entityframeworkcore.proxies) nuget
+            //services.AddDbContext<AppDB>(option => option.
+            //    UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("AppDb")));
             services.AddDbContext<AppDB>(option => option.UseSqlServer(Configuration.GetConnectionString("AppDb")));
 
             services.AddScoped<App>();

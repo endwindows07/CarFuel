@@ -51,12 +51,20 @@ namespace CarFuel.Services
         public override Car Add(Car item)
         {
             //app.CurentMember.Cars.
-
-            var userCars = app.Cars.Query(it => it.Owner == app.CurentMember);
-
-            if (userCars.Count() >= 2) throw new Exception();
-            item.Owner = app.CurentMember;
-            return base.Add(item);
+            try
+            {
+                //var userCars = app.Cars.Query(it => it.Owner == app.CurentMember);
+                //app.CurentMember.Cars
+                //if (userCars.Count() >= 2) throw new Exception();
+                //if (app.CurentMember.Cars.Count() >= 2) throw new Exception();
+                //item.Owner = app.CurentMember;
+                app.CurentMember.Cars.Add(item);
+                return base.Add(item);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

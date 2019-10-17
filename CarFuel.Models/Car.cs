@@ -22,7 +22,7 @@ namespace CarFuel.Models
             Model = model;
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Auto Generate
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Auto Generate
         public Guid Id { get; set; }
 
         [StringLength(512)]
